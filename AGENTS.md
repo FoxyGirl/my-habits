@@ -342,3 +342,247 @@ When editing an existing component:
 - Do not rewrite unrelated code.
 - Make the smallest correct change.
 - Match the existing code style.
+
+---
+
+# 16. Forbidden Patterns
+
+Never generate any of the following unless the user explicitly requests them.
+
+## HTML Elements
+
+❌ Never use raw DOM elements.
+
+```tsx
+<div />
+<span />
+<p />
+<button />
+<input />
+<img />
+<form />
+<section />
+<header />
+<footer />
+<nav />
+<main />
+```
+
+Always use their `html.*` equivalents.
+
+---
+
+## React Native Primitives
+
+❌ Never import or use:
+
+```tsx
+View;
+Text;
+Pressable;
+TouchableOpacity;
+TouchableHighlight;
+TouchableWithoutFeedback;
+ScrollView;
+FlatList;
+SectionList;
+Image;
+TextInput;
+SafeAreaView;
+KeyboardAvoidingView;
+StyleSheet;
+```
+
+Always use React Strict DOM primitives instead.
+
+---
+
+## Raw Text Nodes
+
+❌ Never place text directly inside layout elements.
+
+Bad:
+
+```tsx
+<html.div>Hello World</html.div>
+```
+
+Bad:
+
+```tsx
+<html.div>{title}</html.div>
+```
+
+Bad:
+
+```tsx
+<html.div>{count}</html.div>
+```
+
+Always wrap text:
+
+```tsx
+<html.div>
+  <html.span>{title}</html.span>
+</html.div>
+```
+
+---
+
+## Inline Styles
+
+❌ Never write:
+
+```tsx
+style={{ padding: 16 }}
+```
+
+or
+
+```tsx
+style={[
+    styles.container,
+    { padding: 16 }
+]}
+```
+
+All styles belong in `css.create()`.
+
+---
+
+## Platform Checks
+
+❌ Never write:
+
+```tsx
+Platform.OS;
+```
+
+```tsx
+Platform.select();
+```
+
+```tsx
+navigator.userAgent;
+```
+
+```tsx
+window.matchMedia(...)
+```
+
+Split implementations into:
+
+```
+Component.web.tsx
+Component.native.tsx
+```
+
+when necessary.
+
+---
+
+## Web-only APIs
+
+Do not rely on:
+
+- document
+- window
+- localStorage
+- sessionStorage
+- HTMLElement
+- CSSStyleSheet
+- MutationObserver
+- ResizeObserver
+
+unless the code is explicitly web-only.
+
+---
+
+## Web-only CSS
+
+Avoid:
+
+- display: grid
+- position: fixed
+- backdrop-filter
+- filter
+- clip-path
+- ::before
+- ::after
+- :hover
+- :focus-visible
+- :has()
+- :nth-child()
+- @media
+- @container
+
+unless explicitly requested.
+
+---
+
+## Untyped Code
+
+Do not generate:
+
+```ts
+any;
+```
+
+Avoid:
+
+```ts
+as any
+```
+
+Avoid suppressing errors with:
+
+```ts
+// @ts-ignore
+```
+
+Prefer proper types.
+
+---
+
+## Unsafe React Patterns
+
+Avoid:
+
+- class components
+- string refs
+- findDOMNode()
+- forceUpdate()
+- legacy lifecycle methods
+
+Always use modern React APIs.
+
+---
+
+## Accessibility Anti-patterns
+
+Never replace:
+
+```tsx
+<html.button>
+```
+
+with
+
+```tsx
+<html.div onClick={...}>
+```
+
+Never use clickable layout elements when a semantic primitive exists.
+
+---
+
+## Large Unnecessary Refactors
+
+When modifying existing code:
+
+- Do not rewrite unrelated files.
+- Do not rename public APIs.
+- Do not change formatting unnecessarily.
+- Do not reorder imports unless required.
+- Do not introduce new dependencies unless requested.
+- Make the smallest correct change.
