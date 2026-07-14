@@ -79,6 +79,26 @@ export const styles = css.create({
     fontFamily: typography.regular,
     fontSize: typography.body,
   },
+  profileFields: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing.md,
+  },
+  profileField: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing.xs,
+  },
+  profileLabel: {
+    color: colors.mutedText,
+    fontFamily: typography.semibold,
+    fontSize: typography.caption,
+  },
+  profileValue: {
+    color: colors.text,
+    fontFamily: typography.regular,
+    fontSize: typography.body,
+  },
   button: {
     display: 'flex',
     alignItems: 'center',
@@ -90,6 +110,21 @@ export const styles = css.create({
     },
     borderRadius: 10,
     marginTop: 'auto',
+  },
+  secondaryButton: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: spacing.md,
+    backgroundColor: colors.surface,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  secondaryButtonText: {
+    color: colors.primary,
+    fontFamily: typography.semibold,
+    fontSize: typography.body,
+    fontWeight: '600',
   },
   buttonText: {
     color: colors.surface,
