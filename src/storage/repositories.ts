@@ -94,6 +94,17 @@ async function writeValue<T>(key: string, value: T): Promise<void> {
   await storage.setItem(key, JSON.stringify(value));
 }
 
+const mutationQueues = new Map<string, Promise<void>>();
+
+function serializeMutation<T>(key: string, mutation: () => Promise<T>): Promise<T> {
+  const previousMutation = mutationQueues.get(key) ?? Promise.resolve();
+  const currentMutation = previousMutation.catch(() => undefined).then(mutation);
+
+  mutationQueues.set(key, currentMutation.then(() => undefined, () => undefined));
+
+  return currentMutation;
+}
+
 function isUserProfileList(value: unknown): value is UserProfile[] {
   return Array.isArray(value) && value.every(isUserProfile);
 }
@@ -111,17 +122,19 @@ export async function getUsers(): Promise<UserProfile[]> {
 }
 
 export async function saveUser(user: UserProfile): Promise<void> {
-  const users = await getUsers();
-  const existingIndex = users.findIndex((existingUser) => existingUser.id === user.id);
-  const nextUsers = [...users];
+  return serializeMutation(storageKeys.users, async () => {
+    const users = await getUsers();
+    const existingIndex = users.findIndex((existingUser) => existingUser.id === user.id);
+    const nextUsers = [...users];
 
-  if (existingIndex === -1) {
-    nextUsers.push(user);
-  } else {
-    nextUsers[existingIndex] = user;
-  }
+    if (existingIndex === -1) {
+      nextUsers.push(user);
+    } else {
+      nextUsers[existingIndex] = user;
+    }
 
-  await writeValue(storageKeys.users, nextUsers);
+    await writeValue(storageKeys.users, nextUsers);
+  });
 }
 
 export async function findUserByEmail(email: string): Promise<UserProfile | null> {
@@ -140,11 +153,11 @@ export async function getSession(): Promise<Session | null> {
 }
 
 export async function saveSession(session: Session): Promise<void> {
-  await writeValue(storageKeys.session, session);
+  return serializeMutation(storageKeys.session, () => writeValue(storageKeys.session, session));
 }
 
 export async function clearSession(): Promise<void> {
-  await storage.removeItem(storageKeys.session);
+  return serializeMutation(storageKeys.session, () => storage.removeItem(storageKeys.session));
 }
 
 export async function getHabits(): Promise<Habit[]> {
@@ -152,28 +165,33 @@ export async function getHabits(): Promise<Habit[]> {
 }
 
 export async function saveHabit(habit: Habit): Promise<void> {
-  const habits = await getHabits();
-  const existingIndex = habits.findIndex((existingHabit) => existingHabit.id === habit.id);
-  const nextHabits = [...habits];
-
-  if (existingIndex === -1) {
-    nextHabits.push({ ...habit, completionDates: normalizeCompletionDates(habit.completionDates) });
-  } else {
-    nextHabits[existingIndex] = {
+  return serializeMutation(storageKeys.habits, async () => {
+    const habits = await getHabits();
+    const existingIndex = habits.findIndex((existingHabit) => existingHabit.id === habit.id);
+    const nextHabits = [...habits];
+    const normalizedHabit = {
       ...habit,
       completionDates: normalizeCompletionDates(habit.completionDates),
     };
-  }
 
-  await writeValue(storageKeys.habits, nextHabits);
+    if (existingIndex === -1) {
+      nextHabits.push(normalizedHabit);
+    } else {
+      nextHabits[existingIndex] = normalizedHabit;
+    }
+
+    await writeValue(storageKeys.habits, nextHabits);
+  });
 }
 
 export async function deleteHabit(habitId: string): Promise<void> {
-  const habits = await getHabits();
-  await writeValue(
-    storageKeys.habits,
-    habits.filter((habit) => habit.id !== habitId),
-  );
+  return serializeMutation(storageKeys.habits, async () => {
+    const habits = await getHabits();
+    await writeValue(
+      storageKeys.habits,
+      habits.filter((habit) => habit.id !== habitId),
+    );
+  });
 }
 
 export async function completeHabit(habitId: string, date: string = today()): Promise<Habit | null> {
@@ -181,19 +199,23 @@ export async function completeHabit(habitId: string, date: string = today()): Pr
     throw new Error(`Invalid completion date: ${date}`);
   }
 
-  const habits = await getHabits();
-  const habit = habits.find((candidate) => candidate.id === habitId);
-  if (!habit) {
-    return null;
-  }
+  return serializeMutation(storageKeys.habits, async () => {
+    const habits = await getHabits();
+    const habit = habits.find((candidate) => candidate.id === habitId);
+    if (!habit) {
+      return null;
+    }
 
-  const updatedHabit: Habit = {
-    ...habit,
-    completionDates: normalizeCompletionDates([...habit.completionDates, date]),
-  };
-  await saveHabit(updatedHabit);
+    const updatedHabit: Habit = {
+      ...habit,
+      completionDates: normalizeCompletionDates([...habit.completionDates, date]),
+    };
+    const habitIndex = habits.findIndex((candidate) => candidate.id === habitId);
+    habits[habitIndex] = updatedHabit;
+    await writeValue(storageKeys.habits, habits);
 
-  return updatedHabit;
+    return updatedHabit;
+  });
 }
 
 export async function getSuggestionHistory(): Promise<SuggestionHistoryEntry[]> {
@@ -203,6 +225,8 @@ export async function getSuggestionHistory(): Promise<SuggestionHistoryEntry[]> 
 export async function saveSuggestionHistoryEntry(
   entry: SuggestionHistoryEntry,
 ): Promise<void> {
-  const history = await getSuggestionHistory();
-  await writeValue(storageKeys.suggestionHistory, [...history, entry]);
+  return serializeMutation(storageKeys.suggestionHistory, async () => {
+    const history = await getSuggestionHistory();
+    await writeValue(storageKeys.suggestionHistory, [...history, entry]);
+  });
 }
