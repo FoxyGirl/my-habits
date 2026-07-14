@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "My Habits",
+    "slug": "my-habits",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "myhabits",
+    "userInterfaceStyle": "automatic",
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

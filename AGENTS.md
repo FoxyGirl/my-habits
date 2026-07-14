@@ -171,20 +171,32 @@ Avoid unless explicitly required:
 
 # 6. Layout
 
-Remember:
+React Strict DOM layout conformance requires every flex-dependent style to have
+an explicit flex parent. This applies to `flex`, `gap`, `alignItems`,
+`justifyContent`, `flexDirection`, and related properties.
+
+Use an explicit flex wrapper when a screen is rendered directly beneath a
+router, native host, or another non-RSD parent:
 
 ```tsx
-<html.div
+const styles = css.create({
+  root: {
+    display: 'flex',
+  },
+  screen: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+});
+
+<html.div style={styles.root}>
+  <html.main style={styles.screen} />
+</html.div>
 ```
 
-already behaves like
-
-```css
-display: flex;
-flex-direction: column;
-```
-
-Do not add these properties unless changing them.
+Use `display: 'flex'` explicitly on any RSD element whose own styles use
+flex-dependent properties. Do not assume that a semantic primitive or a
+router-provided parent is a flex container.
 
 Prefer Flexbox over absolute positioning.
 
