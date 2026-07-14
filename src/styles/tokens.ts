@@ -21,6 +21,9 @@ export const spacing = {
 };
 
 export const typography = {
+  regular: 'Roboto_400Regular',
+  semibold: 'Roboto_600SemiBold',
+  bold: 'Roboto_700Bold',
   title: 32,
   heading: 22,
   body: 16,
@@ -61,16 +64,19 @@ export const styles = css.create({
   },
   title: {
     color: colors.text,
+    fontFamily: typography.bold,
     fontSize: typography.title,
     fontWeight: '700',
   },
   heading: {
     color: colors.text,
+    fontFamily: typography.semibold,
     fontSize: typography.heading,
     fontWeight: '600',
   },
   body: {
     color: colors.mutedText,
+    fontFamily: typography.regular,
     fontSize: typography.body,
   },
   button: {
@@ -87,6 +93,7 @@ export const styles = css.create({
   },
   buttonText: {
     color: colors.surface,
+    fontFamily: typography.semibold,
     fontSize: typography.body,
     fontWeight: '600',
   },
