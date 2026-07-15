@@ -29,6 +29,8 @@ These rules are mandatory. Always follow them when generating or modifying code.
 
 Keep platform-specific code minimal. Use `Platform.select` or `.web.tsx` / `.native.tsx` file suffixes only when a genuine platform divergence exists — default to writing once and letting RN/Expo handle both.
 
+---
+
 # 3. Conventions
 
 - **TypeScript everywhere**, including config files where practical.
@@ -39,6 +41,8 @@ Keep platform-specific code minimal. Use `Platform.select` or `.web.tsx` / `.nat
 - Don't add dependencies for problems solvable with a few lines of code (e.g. date math) unless the library is already idiomatic in the Expo ecosystem (e.g. `date-fns`).
 - Match existing formatting; don't reformat unrelated files.
 
+---
+
 # 4. Testing changes
 
 Since this is a UI-heavy cross-platform app, verify changes by actually running them:
@@ -48,6 +52,8 @@ npx expo start --web    # fastest loop for UI iteration
 ```
 
 Check both a mobile viewport and web layout before calling a UI change done — react-native-web can diverge from native rendering (touch targets, scroll behavior, safe-area insets).
+
+---
 
 # 5. Components
 
@@ -80,7 +86,37 @@ Do not prematurely memoize everything.
 
 ---
 
-# 10. Performance
+# 7. Styling
+
+- Use `StyleSheet.create` from `react-native` for all component styles.
+- Colocate styles with the component that uses them.
+- Use the token objects exported from `src/styles/tokens.ts` (`colors`, `spacing`, `typography`) for consistency.
+- Do **not** use CSS files, CSS modules, PostCSS, Tailwind, or other CSS-in-JS libraries.
+- Do **not** use `display: 'flex'` — every `View` is already a flex container.
+- Do **not** use web-only layout properties (e.g. `boxSizing`, `overflow: scroll` on `View`). Use `ScrollView` for scrollable regions.
+
+## Interaction states
+
+Use `Pressable` for any interactive surface. Handle `:active` / `:hover` through the `pressed` and `hovered` callback states:
+
+```tsx
+<Pressable
+  style={({ hovered, pressed }) => [
+    styles.button,
+    (pressed || hovered) && styles.buttonPressed,
+  ]}
+>
+  <Text style={styles.buttonText}>Action</Text>
+</Pressable>
+```
+
+`hovered` is provided by `react-native-web` on web and ignored on native.
+
+For scrolling lists or screens, wrap content in `ScrollView` and apply layout styles via `contentContainerStyle`.
+
+---
+
+# 8. Performance
 
 Avoid:
 
@@ -93,7 +129,7 @@ Prefer stable references.
 
 ---
 
-# 11. TypeScript
+# 9. TypeScript
 
 Always:
 
@@ -106,7 +142,7 @@ Always:
 
 ---
 
-# 12. Code Quality
+# 10. Code Quality
 
 Generate code that is:
 
@@ -127,7 +163,7 @@ unless explicitly requested.
 
 ---
 
-# 13. Before Finishing
+# 11. Before Finishing
 
 Verify:
 
@@ -137,7 +173,9 @@ Verify:
 - [ ] TypeScript passes without `any`.
 - [ ] Code is cross-platform.
 
-# 14. Existing Code
+---
+
+# 12. Existing Code
 
 When editing an existing component:
 
@@ -149,7 +187,7 @@ When editing an existing component:
 
 ---
 
-# 15. Web-only APIs
+# 13. Web-only APIs
 
 Do not rely on:
 
@@ -166,7 +204,7 @@ unless the code is explicitly web-only.
 
 ---
 
-# 16. Web-only CSS
+# 14. Web-only CSS
 
 Avoid:
 
@@ -188,7 +226,21 @@ unless explicitly requested.
 
 ---
 
-# 17. Untyped Code
+# 15. Unsafe React Patterns
+
+Avoid:
+
+- class components
+- string refs
+- findDOMNode()
+- forceUpdate()
+- legacy lifecycle methods
+
+Always use modern React APIs.
+
+---
+
+# 16. Untyped Code
 
 Do not generate:
 
@@ -212,21 +264,7 @@ Prefer proper types.
 
 ---
 
-# 18. Unsafe React Patterns
-
-Avoid:
-
-- class components
-- string refs
-- findDOMNode()
-- forceUpdate()
-- legacy lifecycle methods
-
-Always use modern React APIs.
-
----
-
-# 19. Large Unnecessary Refactors
+# 17. Large Unnecessary Refactors
 
 When modifying existing code:
 

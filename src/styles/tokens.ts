@@ -1,4 +1,4 @@
-import { css } from 'react-strict-dom';
+import { StyleSheet } from 'react-native';
 
 export const colors = {
   background: '#F7F8FA',
@@ -30,30 +30,24 @@ export const typography = {
   caption: 14,
 };
 
-export const styles = css.create({
+export const styles = StyleSheet.create({
   root: {
-    display: 'flex',
     width: '100%',
     height: '100%',
   },
   screen: {
-    display: 'flex',
     flex: 1,
     padding: spacing.md,
-    boxSizing: 'border-box',
-    overflow: 'scroll',
     backgroundColor: colors.background,
     justifyContent: 'flex-start',
   },
   card: {
-    display: 'flex',
     flexDirection: 'column',
     flexGrow: 0,
     flexShrink: 0,
     width: '100%',
     maxWidth: 560,
     minHeight: '100%',
-    boxSizing: 'border-box',
     alignSelf: 'center',
     padding: spacing.xl,
     gap: spacing.md,
@@ -80,12 +74,10 @@ export const styles = css.create({
     fontSize: typography.body,
   },
   profileFields: {
-    display: 'flex',
     flexDirection: 'column',
     gap: spacing.md,
   },
   profileField: {
-    display: 'flex',
     flexDirection: 'column',
     gap: spacing.xs,
   },
@@ -100,19 +92,16 @@ export const styles = css.create({
     fontSize: typography.body,
   },
   button: {
-    display: 'flex',
     alignItems: 'center',
     padding: spacing.md,
-    backgroundColor: {
-      default: colors.primary,
-      ':hover': colors.primaryPressed,
-      ':active': colors.primaryPressed,
-    },
+    backgroundColor: colors.primary,
     borderRadius: 10,
     marginTop: 'auto',
   },
+  buttonPressed: {
+    backgroundColor: colors.primaryPressed,
+  },
   secondaryButton: {
-    display: 'flex',
     alignItems: 'center',
     padding: spacing.md,
     backgroundColor: colors.surface,

@@ -1,5 +1,3 @@
-import '../strict.css';
-
 import { Roboto_400Regular } from '@expo-google-fonts/roboto/400Regular';
 import { Roboto_600SemiBold } from '@expo-google-fonts/roboto/600SemiBold';
 import { Roboto_700Bold } from '@expo-google-fonts/roboto/700Bold';

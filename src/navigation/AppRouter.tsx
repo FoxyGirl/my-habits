@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { html } from 'react-strict-dom';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { mockUser } from '@/domain/mockUser';
 import { ProfileScreen } from '@/screens/ProfileScreen';
@@ -38,30 +38,30 @@ export function AppRouter() {
   };
 
   return (
-    <html.div style={styles.root}>
-      <html.main data-layoutconformance="strict" style={styles.screen}>
+    <View style={styles.root}>
+      <ScrollView contentContainerStyle={styles.screen}>
         {screen === 'profile' ? (
           <ProfileScreen user={mockUser} onBack={() => setScreen('dashboard')} />
         ) : (
-          <html.section style={styles.card}>
-            <html.h1 style={styles.title}>
-              <html.span>My Habits</html.span>
-            </html.h1>
-            <html.h2 style={styles.heading}>
-              <html.span>{copy.heading}</html.span>
-            </html.h2>
-            <html.p style={styles.body}>
-              <html.span>{copy.body}</html.span>
-            </html.p>
-            <html.button style={styles.secondaryButton} onClick={() => setScreen('profile')}>
-              <html.span style={styles.secondaryButtonText}>View profile</html.span>
-            </html.button>
-            <html.button style={styles.button} onClick={() => setScreen(nextScreen[previewScreen])}>
-              <html.span style={styles.buttonText}>{copy.action}</html.span>
-            </html.button>
-          </html.section>
+          <View style={styles.card}>
+            <Text style={styles.title}>My Habits</Text>
+            <Text style={styles.heading}>{copy.heading}</Text>
+            <Text style={styles.body}>{copy.body}</Text>
+            <Pressable style={styles.secondaryButton} onPress={() => setScreen('profile')}>
+              <Text style={styles.secondaryButtonText}>View profile</Text>
+            </Pressable>
+            <Pressable
+              style={({ hovered, pressed }) => [
+                styles.button,
+                (pressed || hovered) && styles.buttonPressed,
+              ]}
+              onPress={() => setScreen(nextScreen[previewScreen])}
+            >
+              <Text style={styles.buttonText}>{copy.action}</Text>
+            </Pressable>
+          </View>
         )}
-      </html.main>
-    </html.div>
+      </ScrollView>
+    </View>
   );
 }
