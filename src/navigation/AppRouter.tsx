@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { html } from 'react-strict-dom';
+import { ScrollView, Text, View } from 'react-native';
+
+import { Button, Card } from 'heroui-native';
 
 import { mockUser } from '@/domain/mockUser';
 import { ProfileScreen } from '@/screens/ProfileScreen';
@@ -38,30 +40,31 @@ export function AppRouter() {
   };
 
   return (
-    <html.div style={styles.root}>
-      <html.main data-layoutconformance="strict" style={styles.screen}>
+    <View style={styles.root}>
+      <ScrollView contentContainerStyle={styles.screen}>
         {screen === 'profile' ? (
           <ProfileScreen user={mockUser} onBack={() => setScreen('dashboard')} />
         ) : (
-          <html.section style={styles.card}>
-            <html.h1 style={styles.title}>
-              <html.span>My Habits</html.span>
-            </html.h1>
-            <html.h2 style={styles.heading}>
-              <html.span>{copy.heading}</html.span>
-            </html.h2>
-            <html.p style={styles.body}>
-              <html.span>{copy.body}</html.span>
-            </html.p>
-            <html.button style={styles.secondaryButton} onClick={() => setScreen('profile')}>
-              <html.span style={styles.secondaryButtonText}>View profile</html.span>
-            </html.button>
-            <html.button style={styles.button} onClick={() => setScreen(nextScreen[previewScreen])}>
-              <html.span style={styles.buttonText}>{copy.action}</html.span>
-            </html.button>
-          </html.section>
+          <Card style={styles.card}>
+            <Text style={styles.title}>My Habits</Text>
+            <Text style={styles.heading}>{copy.heading}</Text>
+            <Text style={styles.body}>{copy.body}</Text>
+            <Button
+              variant="secondary"
+              style={styles.fullWidth}
+              onPress={() => setScreen('profile')}
+            >
+              <Button.Label>View profile</Button.Label>
+            </Button>
+            <Button
+              className="mt-auto w-full"
+              onPress={() => setScreen(nextScreen[previewScreen])}
+            >
+              <Button.Label>{copy.action}</Button.Label>
+            </Button>
+          </Card>
         )}
-      </html.main>
-    </html.div>
+      </ScrollView>
+    </View>
   );
 }

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Build a cross-platform habit tracker for iOS, Android, and Web using Expo, React, TypeScript, and `react-strict-dom`.
+Build a cross-platform habit tracker for iOS, Android, and Web using Expo, React, TypeScript, and `react-native`.
 
 The app will support registration, login, habit management, streak tracking, offline persistence, and AI-generated habit suggestions with a local fallback when offline.
 
@@ -10,9 +10,9 @@ The app will support registration, login, habit management, streak tracking, off
 
 - No application source code or package configuration exists.
 - `globalTask.md` is the complete product specification.
-- `AGENTS.md` requires `react-strict-dom` primitives, `css.create()` styles, wrapped text nodes, semantic components, and cross-platform code.
-- React Strict DOM supports shared files plus platform-specific `.web`, `.native`, `.ios`, and `.android` files.
-- React Strict DOM's Expo setup requires bundler module resolution, strict TypeScript settings, and appropriate module suffixes.
+- `AGENTS.md` requires `react-native` primitives, `StyleSheet.create()` styles, cross-platform components, and shared files whenever possible.
+- React Native supports shared files plus platform-specific `.web`, `.native`, `.ios`, and `.android` files when a genuine divergence exists.
+- Expo's React Native setup uses bundler module resolution, strict TypeScript settings, and appropriate module suffixes.
 
 ## Assumptions
 
@@ -81,8 +81,8 @@ src/
 ### Success Criteria
 
 - The application starts on Web, iOS, and Android.
-- All UI primitives come from `react-strict-dom`.
-- No raw HTML or React Native UI primitives are introduced.
+- All UI primitives come from `react-native`.
+- No raw HTML or React Strict DOM primitives are introduced.
 - TypeScript compilation succeeds.
 
 ## Phase 2: Domain Model and Offline Storage

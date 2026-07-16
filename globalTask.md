@@ -12,7 +12,7 @@ The app should run on:
 - Android
 - Web
 
-Use `react-strict-dom`.
+Use `react-native`.
 
 ---
 
