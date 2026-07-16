@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+
+import { Button, Card } from 'heroui-native';
 
 import { mockUser } from '@/domain/mockUser';
 import { ProfileScreen } from '@/screens/ProfileScreen';
@@ -43,23 +45,24 @@ export function AppRouter() {
         {screen === 'profile' ? (
           <ProfileScreen user={mockUser} onBack={() => setScreen('dashboard')} />
         ) : (
-          <View style={styles.card}>
+          <Card style={styles.card}>
             <Text style={styles.title}>My Habits</Text>
             <Text style={styles.heading}>{copy.heading}</Text>
             <Text style={styles.body}>{copy.body}</Text>
-            <Pressable style={styles.secondaryButton} onPress={() => setScreen('profile')}>
-              <Text style={styles.secondaryButtonText}>View profile</Text>
-            </Pressable>
-            <Pressable
-              style={({ hovered, pressed }) => [
-                styles.button,
-                (pressed || hovered) && styles.buttonPressed,
-              ]}
+            <Button
+              variant="secondary"
+              style={styles.fullWidth}
+              onPress={() => setScreen('profile')}
+            >
+              <Button.Label>View profile</Button.Label>
+            </Button>
+            <Button
+              className="mt-auto w-full"
               onPress={() => setScreen(nextScreen[previewScreen])}
             >
-              <Text style={styles.buttonText}>{copy.action}</Text>
-            </Pressable>
-          </View>
+              <Button.Label>{copy.action}</Button.Label>
+            </Button>
+          </Card>
         )}
       </ScrollView>
     </View>

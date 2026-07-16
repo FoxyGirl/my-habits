@@ -91,34 +91,7 @@ export const styles = StyleSheet.create({
     fontFamily: typography.regular,
     fontSize: typography.body,
   },
-  button: {
-    alignItems: 'center',
-    padding: spacing.md,
-    backgroundColor: colors.primary,
-    borderRadius: 10,
-    marginTop: 'auto',
-  },
-  buttonPressed: {
-    backgroundColor: colors.primaryPressed,
-  },
-  secondaryButton: {
-    alignItems: 'center',
-    padding: spacing.md,
-    backgroundColor: colors.surface,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.primary,
-  },
-  secondaryButtonText: {
-    color: colors.primary,
-    fontFamily: typography.semibold,
-    fontSize: typography.body,
-    fontWeight: '600',
-  },
-  buttonText: {
-    color: colors.surface,
-    fontFamily: typography.semibold,
-    fontSize: typography.body,
-    fontWeight: '600',
+  fullWidth: {
+    width: '100%',
   },
 });

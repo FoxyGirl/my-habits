@@ -16,6 +16,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "android": {
+      "package": "com.anonymous.myhabits"
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.myhabits"
     }
   }
 }

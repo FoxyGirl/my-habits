@@ -1,4 +1,6 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+
+import { Button, Card } from 'heroui-native';
 
 import type { UserProfile } from '@/domain/user';
 import { styles } from '@/styles/tokens';
@@ -26,7 +28,7 @@ function ProfileField({ label, value }: { label: string; value: string }) {
 
 export function ProfileScreen({ user, onBack }: ProfileScreenProps) {
   return (
-    <View style={styles.card}>
+    <Card style={styles.card}>
       <Text style={styles.title}>Profile</Text>
       <Text style={styles.body}>Your account information</Text>
       <View style={styles.profileFields}>
@@ -36,15 +38,9 @@ export function ProfileScreen({ user, onBack }: ProfileScreenProps) {
         <ProfileField label="Birth date" value={user.birthDate} />
         <ProfileField label="Member since" value={user.createdAt.slice(0, 10)} />
       </View>
-      <Pressable
-        style={({ hovered, pressed }) => [
-          styles.button,
-          (pressed || hovered) && styles.buttonPressed,
-        ]}
-        onPress={onBack}
-      >
-        <Text style={styles.buttonText}>Back to dashboard</Text>
-      </Pressable>
-    </View>
+      <Button className="mt-auto w-full" onPress={onBack}>
+        <Button.Label>Back to dashboard</Button.Label>
+      </Button>
+    </Card>
   );
 }

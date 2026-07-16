@@ -25,7 +25,7 @@ These rules are mandatory. Always follow them when generating or modifying code.
 - **Expo Router** for navigation (file-based routing) unless the project already has React Navigation wired up
 - **State**: prefer React state/context for local UI state; only reach for a library (Zustand, Redux, etc.) if state complexity genuinely warrants it — don't add one preemptively
 - **Persistence**: local-first storage (e.g. `expo-sqlite` or `AsyncStorage`) is sufficient for v1; no backend/auth unless asked
-- **Styling**: `StyleSheet.create`, keep styles colocated with components; no CSS-in-JS libraries unless already present
+- **Styling**: `StyleSheet.create` for custom styles; **HeroUI Native** components for common UI surfaces; Tailwind utility classes via **Uniwind** for HeroUI component styling when it improves consistency
 
 Keep platform-specific code minimal. Use `Platform.select` or `.web.tsx` / `.native.tsx` file suffixes only when a genuine platform divergence exists — default to writing once and letting RN/Expo handle both.
 
@@ -88,16 +88,18 @@ Do not prematurely memoize everything.
 
 # 7. Styling
 
-- Use `StyleSheet.create` from `react-native` for all component styles.
+- Use `StyleSheet.create` from `react-native` for all custom component styles.
 - Colocate styles with the component that uses them.
 - Use the token objects exported from `src/styles/tokens.ts` (`colors`, `spacing`, `typography`) for consistency.
-- Do **not** use CSS files, CSS modules, PostCSS, Tailwind, or other CSS-in-JS libraries.
+- Use **HeroUI Native** components (`Button`, `Card`, etc.) for common UI surfaces.
+- Use Tailwind utility classes via **Uniwind** for HeroUI component styling when it improves consistency.
+- Keep the required global CSS entry at `global.css` (`@import 'tailwindcss'; @import 'uniwind'; @import 'heroui-native/styles';`).
 - Do **not** use `display: 'flex'` — every `View` is already a flex container.
 - Do **not** use web-only layout properties (e.g. `boxSizing`, `overflow: scroll` on `View`). Use `ScrollView` for scrollable regions.
 
 ## Interaction states
 
-Use `Pressable` for any interactive surface. Handle `:active` / `:hover` through the `pressed` and `hovered` callback states:
+Use HeroUI `Button` for actions. Its built-in feedback handles press states. When building a custom interactive surface, use `Pressable` and handle `:active` / `:hover` through the `pressed` and `hovered` callback states:
 
 ```tsx
 <Pressable
