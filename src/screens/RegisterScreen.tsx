@@ -166,7 +166,13 @@ export function RegisterScreen() {
             {sexOptions.map((option) => (
               <Button
                 key={option.value}
-                variant={sex === option.value ? 'primary' : 'outline'}
+                // TODO: There is the issue with 'outline' and 'ghost' variants.
+                // Web  ERROR  [colorKit.RGB] An error occurred while attempting to convert the provided parameter into an `RGB` color. As a result, the default color "black" will be used instead.
+                // variant={sex === option.value ? 'primary' : 'outline'}
+                variant={sex === option.value ? 'primary' : 'secondary'}
+                // There are working variants for Button from 'heroui-native' for WEB
+                // variant="tertiary"
+                // variant="secondary"
                 size="sm"
                 onPress={() => setSex(option.value)}
               >
@@ -195,11 +201,7 @@ export function RegisterScreen() {
           </View>
         )}
 
-        <Button
-          variant="primary"
-          onPress={handleSubmit}
-          isDisabled={isSubmitting}
-        >
+        <Button variant="primary" onPress={handleSubmit} isDisabled={isSubmitting}>
           <Button.Label>{isSubmitting ? 'Creating account...' : 'Create account'}</Button.Label>
         </Button>
       </Card>
